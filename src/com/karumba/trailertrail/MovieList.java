@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,11 +22,17 @@ import org.json.JSONObject;
 
 
 
+
+
+
+
+
 import com.karumba.controllers.GlobalVars;
 import com.karumba.controllers.NavAdapter;
 import com.karumba.controllers.OffersAdapter;
 import com.karumba.controllers.ServiceHandler;
 import com.karumba.controllers.ShopsAdapter;
+import com.karumba.dataModels.MovieModel;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -55,6 +63,16 @@ public class MovieList extends ActionBarActivity {
 	// json array sstring from server
 	public static String jsonStr;
 
+	// JSON Node names
+		static final String kTitle = "Title";
+		static final String kImdbID = "imdbID";
+		static final String kType = "Type";
+		static final String kYear = "Year";
+		static final String kPoster = "Poster";
+
+		MovieModel myMovie;
+
+		
 	// offer listview
 	ListView lstOffers;
 	public static ShopsAdapter jsonOffersAdapter;
@@ -364,42 +382,90 @@ public class MovieList extends ActionBarActivity {
 			super.onProgressUpdate(values);
 		}
 
+//		@Override
+//		protected String doInBackground(String... params) {
+//			ServiceHandler sh = new ServiceHandler();
+//
+//			jsonStr = sh.makeServiceCall("http://dukalangu.co.ke/mallsfinal/home.php",
+//					ServiceHandler.POST);
+//			// String
+//			// jsonStrD=sh.makeServiceCall(GlobalVars.URL_ROOT+"malls.php",
+//			// ServiceHandler.POST);
+//
+//			Log.d("Reponse: ", "->" + jsonStr);
+//
+//			if (jsonStr != null) {
+//				try {
+//					jsonObject = new JSONObject(jsonStr);
+//					// jsonObjectD =new JSONObject(jsonStrD);
+//
+//					jsonOffersArray = jsonObject.getJSONArray("offers");
+//					jsonNavArray = jsonObject.getJSONArray("malls");
+//
+//					Log.d("Tupid stupid: ", "->" + jsonNavArray.toString());
+//
+//					jsonOffersAdapter = new ShopsAdapter(MovieList.this,
+//							jsonOffersArray);
+//					jsonNavAdapter = new NavAdapter(MovieList.this,
+//							jsonNavArray);
+//
+//				} catch (JSONException e) {
+//					e.printStackTrace();
+//				}
+//			} else {
+//				Log.e("ServiceHandler", "no data from server");
+//			}
+//
+//			return null;
+//
+//		}
+		
 		@Override
-		protected String doInBackground(String... params) {
+		protected String doInBackground(String... arg0) {			// TODO create service handler class instance
 			ServiceHandler sh = new ServiceHandler();
-
-			jsonStr = sh.makeServiceCall("http://dukalangu.co.ke/mallsfinal/home.php",
-					ServiceHandler.POST);
-			// String
-			// jsonStrD=sh.makeServiceCall(GlobalVars.URL_ROOT+"malls.php",
-			// ServiceHandler.POST);
-
-			Log.d("Reponse: ", "->" + jsonStr);
-
+			
+			//create data to post to server
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+			nameValuePairs = new ArrayList<NameValuePair>(1);
+			nameValuePairs.add(new BasicNameValuePair("s", "lucy"));
+			
+			//making a request to url and getting response
+			String jsonStr = sh.makeServiceCall(GlobalVars.URL_ROOT, ServiceHandler.GET, nameValuePairs);
+			
+			//shows the response we got from HTTP requet on the logcat
+			Log.d("Reponsejbjkjkhjk: ",">" + jsonStr);
+			
 			if (jsonStr != null) {
 				try {
-					jsonObject = new JSONObject(jsonStr);
-					// jsonObjectD =new JSONObject(jsonStrD);
+					JSONObject jsonObj = new JSONObject(jsonStr);
 
-					jsonOffersArray = jsonObject.getJSONArray("offers");
-					jsonNavArray = jsonObject.getJSONArray("malls");
+					jsonOffersArray = jsonObj.getJSONArray("Search");
 
-					Log.d("Tupid stupid: ", "->" + jsonNavArray.toString());
+					for (int i = 0; i < jsonOffersArray.length(); i++) {
+						JSONObject obj = jsonOffersArray.getJSONObject(i);
 
-					jsonOffersAdapter = new ShopsAdapter(MovieList.this,
-							jsonOffersArray);
-					jsonNavAdapter = new NavAdapter(MovieList.this,
-							jsonNavArray);
+						String name = obj.getString(kTitle);
+						String regno = obj.getString(kImdbID);
+						String mobile = obj.getString(kType);
+						String address = obj.getString(kYear);
+						String pass = obj.getString(kPoster);
 
+						
+						MovieModel tempMovie = new MovieModel(name, regno, mobile, address, pass);
+
+						myMovie = tempMovie;
+						
+					}
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			} else {
-				Log.e("ServiceHandler", "no data from server");
+				Log.e("ServiceHandler", "Couldn't get any data from the server");
 			}
 
 			return null;
-
 		}
+
+
 	}
 }
