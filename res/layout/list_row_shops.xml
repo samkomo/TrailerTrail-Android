@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_card"
+    android:padding="2dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shop Name"
+        android:id="@+id/tvShopNames"
+
+        android:layout_alignTop="@+id/imgShopLogos"
+        android:layout_toRightOf="@+id/imgShopLogos"
+        android:layout_marginTop="2dp"
+        android:textSize="18dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Description"
+        android:id="@+id/tvShopDescs"
+
+        android:layout_below="@+id/tvShopNames"
+        android:layout_toRightOf="@+id/imgShopLogos" />
+
+    <ImageView
+        android:layout_width="64dp"
+        android:layout_height="56dp"
+        android:id="@+id/imgShopLogos"
+        android:src="@drawable/ic_launcher"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+</RelativeLayout>

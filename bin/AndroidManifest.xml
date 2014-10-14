@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.trailertrail"
+    package="com.karumba.trailertrail"
     android:versionCode="1"
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="19" />
 
     <application
@@ -13,22 +13,30 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+        
+        
+       
         <activity
-            android:name="com.example.trailertrail.MovieList"
+            android:name="com.karumba.trailertrail.Login"
             android:label="@string/app_name" >
             
-        </activity>
-        <activity
-            android:name="com.example.trailertrail.LoginActivity"
-            android:label="@string/title_activity_login" >
-            <intent-filter>
+             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            
         </activity>
+        
+         <activity
+            android:name="com.karumba.trailertrail.MovieList"
+            android:label="@string/app_name" >
+            
+           
+        </activity>
+        
         <activity
-            android:name="com.example.trailertrail.Register"
+            android:name="com.karumba.trailertrail.Register"
             android:label="@string/title_activity_register" >
         </activity>
     </application>
