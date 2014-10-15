@@ -76,6 +76,7 @@ public class Login extends ActionBarActivity  {
 				startActivity(intent);
 				
 			}
+			
 		});	 
 	}
 	/**

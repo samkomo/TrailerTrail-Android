@@ -23,11 +23,11 @@ import org.json.JSONObject;
 import com.karumba.trailertrail.R;
 
 
-public class OffersAdapter extends BaseAdapter implements ListAdapter {
+public class MoviesAdapter extends BaseAdapter implements ListAdapter {
     private final Activity activity;
     private final JSONArray jsonArray;
 
-    public OffersAdapter(Activity activity, JSONArray jsonArray) {
+    public MoviesAdapter(Activity activity, JSONArray jsonArray) {
         assert activity != null;
         assert jsonArray != null;
 

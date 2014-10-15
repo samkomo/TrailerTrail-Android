@@ -11,27 +11,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-//import com.example.schoolapp.R;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import com.karumba.controllers.GlobalVars;
 import com.karumba.controllers.NavAdapter;
-import com.karumba.controllers.OffersAdapter;
+import com.karumba.controllers.MoviesAdapter;
 import com.karumba.controllers.ServiceHandler;
-import com.karumba.controllers.ShopsAdapter;
+import com.karumba.controllers.FilmsAdapter;
 import com.karumba.dataModels.MovieModel;
 
 import android.app.ProgressDialog;
@@ -69,13 +53,27 @@ public class MovieList extends ActionBarActivity {
 		static final String kType = "Type";
 		static final String kYear = "Year";
 		static final String kPoster = "Poster";
-
+		static final String kRated = "Rated";
+		static final String kReleased = "Released";
+		static final String kDirector = "Director";
+		static final String kActors = "Actors";
+		static final String kPlot = "Plot";
+		static final String kGenre = "Genre";
+		static final String kLanguage = "Language";
+		static final String kWriter = "Writer";
+		static final String kId = "id";
+		
+		
 		MovieModel myMovie;
 
+		//HashMap for ListView
+		ArrayList<MovieModel> moviesList;
+		private FilmsAdapter jsonAdapter;
+		JSONArray jsonMovieArray;
 		
 	// offer listview
 	ListView lstOffers;
-	public static ShopsAdapter jsonOffersAdapter;
+	public static FilmsAdapter jsonOffersAdapter;
 	JSONArray jsonOffersArray;
 	JSONObject jsonObject;
 	ProgressDialog pd;
@@ -110,6 +108,9 @@ public class MovieList extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_movie_list);
 
+		//initialize movie list
+		moviesList  = new ArrayList<MovieModel>();
+		
 		// initialize the listview
 		lstOffers = (ListView) findViewById(R.id.listOffers);
 		
@@ -118,16 +119,6 @@ public class MovieList extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             	Intent intent = new Intent(MovieList.this, Register.class);
-
-				try {
-					
-					GlobalVars.SELECTED_SHOP = jsonOffersAdapter.getItem(position).getString(
-							"shop_id");
-					
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 
 				startActivity(intent);
 				
@@ -354,6 +345,9 @@ public class MovieList extends ActionBarActivity {
 
 	public class threadGetOffers extends AsyncTask<String, Integer, String> {
 
+		
+
+
 		@Override
 		protected void onPreExecute() {
 			pd = new ProgressDialog(MovieList.this);
@@ -367,7 +361,7 @@ public class MovieList extends ActionBarActivity {
 		@Override
 		protected void onPostExecute(String result) {
 
-			lstOffers.setAdapter(jsonOffersAdapter);
+			lstOffers.setAdapter(jsonAdapter);
 
 			// Setting the adapter to the listView
 			mDrawerList.setAdapter(jsonNavAdapter);
@@ -404,21 +398,60 @@ public class MovieList extends ActionBarActivity {
 
 					jsonOffersArray = jsonObj.getJSONArray("Search");
 
+					long count = 0;
 					for (int i = 0; i < jsonOffersArray.length(); i++) {
 						JSONObject obj = jsonOffersArray.getJSONObject(i);
+						
+						ServiceHandler sh2 = new ServiceHandler();
+						
+						//create data to post to server
+						List<NameValuePair> idValuePairs = new ArrayList<NameValuePair>(1);
+						idValuePairs = new ArrayList<NameValuePair>(1);
+						idValuePairs.add(new BasicNameValuePair("i", obj.getString(kImdbID)));
+						
+						
+						
+						
+						//making a request to url and getting response
+						String jsonStr2 = sh2.makeServiceCall(GlobalVars.URL_ROOT, ServiceHandler.GET, idValuePairs);
+						if (jsonStr2 != null) {
+							try {
+								JSONObject jsonObj2 = new JSONObject(jsonStr2);
+								
+								Log.d("Reponse key passed: ",">" + jsonObj2);
 
-						String name = obj.getString(kTitle);
-						String regno = obj.getString(kImdbID);
-						String mobile = obj.getString(kType);
-						String address = obj.getString(kYear);
-						String pass = obj.getString(kPoster);
+								String title = jsonObj2.getString(kTitle);
+								String imdID = jsonObj2.getString(kImdbID);
+								String type = jsonObj2.getString(kType);
+								String year = jsonObj2.getString(kYear);
+								String rated = jsonObj2.getString(kRated);
+								String director = jsonObj2.getString(kDirector);
+								String plot = jsonObj2.getString(kPlot);
+								String genre = jsonObj2.getString(kGenre);
+								String language = jsonObj2.getString(kLanguage);
+								String released = jsonObj2.getString(kReleased);
+								String writer = jsonObj2.getString(kWriter);
+								String poster = "";
+								
+								myMovie = new MovieModel(title,imdID,type,year,poster,count,rated,released,director,writer,genre,plot,language);
+								
+								moviesList.add(myMovie);
+								
+								
+								count ++;
+							}catch (JSONException e) {
+								e.printStackTrace();
+							}
+						} else {
+							Log.e("ServiceHandler", "Couldn't get any data from the server");
+						}
 
 						
-						MovieModel tempMovie = new MovieModel(name, regno, mobile, address, pass);
 
-						myMovie = tempMovie;
 						
 					}
+					jsonAdapter = new FilmsAdapter(MovieList.this, moviesList);
+					
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
