@@ -382,43 +382,6 @@ public class MovieList extends ActionBarActivity {
 			super.onProgressUpdate(values);
 		}
 
-//		@Override
-//		protected String doInBackground(String... params) {
-//			ServiceHandler sh = new ServiceHandler();
-//
-//			jsonStr = sh.makeServiceCall("http://dukalangu.co.ke/mallsfinal/home.php",
-//					ServiceHandler.POST);
-//			// String
-//			// jsonStrD=sh.makeServiceCall(GlobalVars.URL_ROOT+"malls.php",
-//			// ServiceHandler.POST);
-//
-//			Log.d("Reponse: ", "->" + jsonStr);
-//
-//			if (jsonStr != null) {
-//				try {
-//					jsonObject = new JSONObject(jsonStr);
-//					// jsonObjectD =new JSONObject(jsonStrD);
-//
-//					jsonOffersArray = jsonObject.getJSONArray("offers");
-//					jsonNavArray = jsonObject.getJSONArray("malls");
-//
-//					Log.d("Tupid stupid: ", "->" + jsonNavArray.toString());
-//
-//					jsonOffersAdapter = new ShopsAdapter(MovieList.this,
-//							jsonOffersArray);
-//					jsonNavAdapter = new NavAdapter(MovieList.this,
-//							jsonNavArray);
-//
-//				} catch (JSONException e) {
-//					e.printStackTrace();
-//				}
-//			} else {
-//				Log.e("ServiceHandler", "no data from server");
-//			}
-//
-//			return null;
-//
-//		}
 		
 		@Override
 		protected String doInBackground(String... arg0) {			// TODO create service handler class instance
